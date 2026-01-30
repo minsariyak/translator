@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braille Translator</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 720px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 24px;
+        }
+
+        .examples {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .examples h6 {
+            font-size: 13px;
+            margin-bottom: 14px;
+            opacity: 0.9;
+        }
+
+        .example-card {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        .example-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .example-text.braille {
+            font-family: monospace;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.5;
+            margin: 6px 0;
+        }
+
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            background: #00d4ff;
+            color: #003049;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 212, 255, 0.35);
+        }
+
+        #translation {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        #translation strong {
+            color: #00d4ff;
+        }
+
+        @media (max-width: 480px) {
+            form {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Braille Translator</h1>
+        <p class="subtitle">Translate English to Braille and vice-versa</p>
+
+        <div class="examples">
+            <h6>Examples</h6>
+
+            <div class="example-card">
+                <div class="label">Input</div>
+                <div class="example-text">Hello world</div>
+
+                <div class="arrow">↓</div>
+
+                <div class="label">Output</div>
+                <div class="example-text braille">
+                    .....OO.OO..O..O..O.O.O.O.O.O.O..OO........OOO.OO..OO.O.OOO.O.O.O.OO.O..
+                </div>
+            </div>
+
+            <div class="example-card">
+                <div class="label">Input</div>
+                <div class="example-text braille">
+                    .....OO.....O.O...OO...........O.OOOO.....O.O...OO....
+                </div>
+
+                <div class="arrow">↓</div>
+
+                <div class="label">Output</div>
+                <div class="example-text">Abc 123</div>
+            </div>
+        </div>
+
+
+        <form action="{% url 'braille:index' %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="text" placeholder="Enter text to translate" required>
+            <button type="submit">Translate</button>
+        </form>
+
+        <div id="translation">
+            <p><strong>Result:</strong> {{ translation }}</p>
+        </div>
+    </div>
+</body>
+
+</html>
